@@ -36,13 +36,13 @@ jobs:
       # Step 5: Copy JAR to EC2
       - name: Copy JAR to EC2
         run: |
-          scp -o StrictHostKeyChecking=no target/*.war ubuntu@13.235.83.123:/home/ubuntu/spring-app/
+          scp -o StrictHostKeyChecking=no target/*.war ubuntu@${{ secrets.EC2_ELASTIC_IP }}:/home/ubuntu/crud-app/
 
       # Step 6: Deploy on EC2
       - name: Deploy on EC2
         run: |
-          ssh -o StrictHostKeyChecking=no ubuntu@13.235.83.123 << 'EOF'
-          sudo kill -9 $(sudo lsof -t -i:8080) || true
-          cd /home/ubuntu/spring-app/
-          sudo java -jar *.war > app.log 2>&1 &
+          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_ELASTIC_IP }} << 'EOF'
+          sudo kill -9 $(sudo lsof -t -i:443) || true
+          /home/ubuntu/crud-app/
+          nohup java -jar *.war > app.log 2>&1 &
           EOF

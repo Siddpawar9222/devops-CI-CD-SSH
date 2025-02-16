@@ -44,5 +44,5 @@ jobs:
           ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_ELASTIC_IP }} << 'EOF'
           sudo kill -9 $(sudo lsof -t -i:443) || true
           cd /home/ubuntu/crud-app/
-          nohup java -jar *.war > app.log 2>&1 &
+          sudo nohup java -jar *.war > app.log 2>&1 &
           EOF
